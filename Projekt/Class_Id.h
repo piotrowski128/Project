@@ -1,5 +1,6 @@
 #pragma once
 #pragma warning(disable : 4996)
+#pragma warning(disable : 4244)
 
 #include <iostream>
 #include <time.h>
@@ -8,7 +9,7 @@ using namespace std;
 
 class Id
 { // id wykonawcy i id zadania
-	int WykId;
+	int Id;
 public:
 
 	char* generate()

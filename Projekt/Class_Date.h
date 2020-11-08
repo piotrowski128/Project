@@ -6,13 +6,10 @@ using namespace std;
 class Date
 { //klasa daty i godziny
 public:
-	int initializer;
 	char date[30];
 public:
-	Date(int i)
-	{
-		initializer = i;
-	}
+	Date() {};
+	
 	void getDate()
 	{
 		time_t czas = time(0);

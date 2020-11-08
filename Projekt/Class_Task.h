@@ -1,31 +1,48 @@
 #pragma once
 #include <iostream>
+#include "klasy.h"
 using namespace std;
 
-
-
-class Task :private Id {
+class Task :public Id,Date {
 	// zarz¹dzanie zadaniami: szukanie, usuwanie, dodawanie, zmiana  wykonawcy
 	// przechowuje dane o zadaniu : Nazwê zadania, nazwê projektu, ile osób uczestniczy w zadaniu, priorytet a tak¿e datê rozpoczêcia
-
+public:
 	typedef struct listaZadan
 	{
 		string nazwa;
 		int priorytet;
+		char* id; char* data[30];
 		listaZadan *next;
 	}*ptr;
 	ptr root;
 	ptr curr;
 	ptr temp;
 
-public:
+
 	Task();
 
 	void add(string nazwa, int priorytet);
-	void search(string nazwa);
 	void delet(string nazwa);
 	void printl();
 
+	listaZadan* searcH(string nazwa)
+	{
+		listaZadan* k = nullptr;
+		temp = root;
+		curr = root;
+		while (curr->next != nullptr && curr->nazwa != nazwa) {
+
+			temp = curr;
+			curr = curr->next;
+		}
+		if (curr == nullptr) {
+			return 0;
+		}
+		else {
+			k = curr;
+			return k;
+		}
+	}
 };
 
 Task::Task() {
@@ -86,20 +103,3 @@ void Task::printl() {
 	}
 }
 
-void Task::search(string nazwa)
-{
-	ptr k = nullptr;
-	temp = root;
-	curr = root;
-	while (curr->next != nullptr && curr->nazwa != nazwa) {
-
-		temp = curr;
-		curr = curr->next;
-	}
-	if (curr == nullptr) {
-		cout << "nie udalo sie znalezc :(" << endl;
-	}
-	else {
-		cout << "udalo sie znalezc :)" << endl;
-	}
-}

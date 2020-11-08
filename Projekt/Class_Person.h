@@ -1,17 +1,16 @@
 #pragma once
 #include <iostream>
+#include "klasy.h"
+#include "Class_Task.h"
 using namespace std;
 
 
-
-
-class Person : private Id {
+class Person : private Id, Date {
 	// zarz¹dzanie zadaniami: szukanie, usuwanie, dodawanie, zmiana  wykonawcy
 	// przechowuje dane o zadaniu : Nazwê zadania, nazwê projektu, ile osób uczestniczy w zadaniu, priorytet a tak¿e datê rozpoczêcia
 	typedef struct zadaniaOsoby
 	{
-		string nazwa;
-		int priorytet;
+		Task::listaZadan* zadanie;
 		zadaniaOsoby* next;
 	}*ptrzad;
 	ptrzad p;
@@ -19,8 +18,9 @@ class Person : private Id {
 	ptrzad t;
 
 	typedef struct listaOsob
-	{
+	{	
 		string Name, Surname;
+		char* id;
 		zadaniaOsoby* ptr;
 		listaOsob* next;
 	}* ptrlis;
@@ -33,10 +33,10 @@ public:
 	Person();
 
 	void addPerson(string imie, string nazwisko);
-	void addTask(string imie, string nazwisko, string nazwa, int priorytet);
+	void addToTask(string imie, string nazwisko, string nazwa, int priorytet, Task* tas);
 
-	void search(string nazwa);
-	void delet(string nazwa);
+	void search(string imie, string nazwisko, string nazwa);
+	void delTask(string imie, string nazwisko, string nazwa);
 	void printl();
 
 };
@@ -54,6 +54,7 @@ void Person::addPerson(string imie, string nazwisko) {
 	n->ptr = nullptr;
 	n->Name= imie;
 	n->Surname = nazwisko;
+	n->id = generate();
 
 	if (root != nullptr) {
 
@@ -67,55 +68,57 @@ void Person::addPerson(string imie, string nazwisko) {
 		root = n;
 	}
 }
-void Person::addTask(string imie, string nazwisko, string nazwa, int priorytet) {
+void Person::addToTask(string imie, string nazwisko, string nazwa, int priorytet, Task* tas) {
+	Task::listaZadan* tsk = nullptr;
+	tsk = tas->searcH(nazwa);
 	
-	temp = root;
-	while ((root->Name != imie || root->Surname != nazwisko) && temp->next != nullptr)
+	if (tsk!=nullptr)
 	{
-		curr = temp;
-		temp = temp->next;
-	}
-	if (root != nullptr) {
-
 		ptrzad n = new zadaniaOsoby;
-		n->next = nullptr;
-		n->nazwa = nazwa;
-		n->priorytet = priorytet;
-
-		t = p;
-		while (c->next != nullptr)
+		temp = root;
+		while ((root->Name != imie || root->Surname != nazwisko) && temp->next != nullptr)
 		{
-			c = t;
-			t = t->next;
+			curr = temp;
+			temp = temp->next;
 		}
-		curr->ptr = n;
-	}
-	
+		if (root != nullptr) {
 
-	
-	else {
-		root = n;
+			n->next = nullptr;
+			n->zadanie = tsk;
+
+			t = p;
+			while (c->next != nullptr)
+			{
+				c = t;
+				t = t->next;
+			}
+			curr->ptr = n;
+		}
+		else {
+			p = n;
+		}
 	}
+	else cout << "Przykro mi, aby dodac osobe do zadania musi istniec dane zadanie." << endl;
 }
 
-void Person::delet(string nazwa)
+void Person::delTask(string imie, string nazwisko, string nazwa)
 {
-	ptr del = nullptr;
-	temp = root;
-	curr = root;
-	while (curr != nullptr && curr->nazwa != nazwa) {
+	ptrzad del = nullptr;
+	t = p;
+	c = p;
+	while (c != nullptr && c->zadanie->nazwa != nazwa) {
 
-		temp = curr;
-		curr = curr->next;
+		t = c;
+		c = c->next;
 	}
-	if (curr == nullptr) {
+	if (c == nullptr) {
 		cout << "ni ma\n";
 		delete del;
 	}
 	else {
-		del = curr;
-		curr = curr->next;
-		temp->next = curr;
+		del = c;
+		c = c->next;
+		t->next = c;
 		delete del;
 		cout << "DELLeted\n";
 	}
@@ -124,19 +127,24 @@ void Person::delet(string nazwa)
 
 void Person::printl() {
 	curr = root;
+	c = p;
 	while (curr != nullptr) {
-		cout << "wartosc: " << curr->priorytet << ", " << curr->nazwa << endl;
+		cout << "imie i nazwisko: " << curr->Name << " " << curr->Surname << endl;
+		while (c != nullptr)
+		{
+			cout << c->zadanie->nazwa << ", " << c->zadanie->priorytet << endl;
+			c = c->next;
+		}
 		curr = curr->next;
 	}
 }
 
-void Person::search(string nazwa)
+void Person::search(string imie, string nazwisko, string nazwa)
 {
-	ptr k = nullptr;
+	ptrlis k = nullptr;
 	temp = root;
 	curr = root;
-	while (curr->next != nullptr && curr->nazwa != nazwa) {
-
+	while (curr->next != nullptr && (curr->Name != imie || curr->Surname !=nazwisko)) {
 		temp = curr;
 		curr = curr->next;
 	}
