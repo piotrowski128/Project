@@ -7,8 +7,6 @@
 #include "Class_Person.h"
 #include "Class_Task.h"
 
-
-
 void Menu11(Task& t)
 {
 	string nazwa; int priorytet;
@@ -24,7 +22,7 @@ void Menu11(Task& t)
 void Menu12(Task& t)
 {
 	cout << "oto twoja lista zadan. Mam nadzieje ze sie podoba :)" << endl;
-	t.printl();
+	t.printCout();
 }
 
 void Menu1(Task& tas)
@@ -55,7 +53,6 @@ void Menu2(int &koniec)
 		else if (menu == 1)
 		{
 			cout << "Mimo ze wybrales opcje 'Zakoncz projekt' to nic nie szkodzi, potrzebne dane i tak beda zapisane :)" << endl;
-			// tu odwolanie do wszystkich klas o pobranie danych: zadania, osoby itp.
 			koniec = 1;
 		}
 		else cout << "mozesz wybrac 1, 2 albo 3 -,- ehhh.... ";
@@ -64,19 +61,19 @@ void Menu2(int &koniec)
 
 void Menu31(Person &p, Task& ta)
 {
-	string imie, nazwisko, nazwa; int ifTaskExist = 1;
+	string imie, nazwisko, nazwa; int TaskExist = 0;
 	cout<<"Dodawanie osoby do zadania. Wybierz osobe z bazy danych a nastepnie zadanie. (Wpisz imie, nazwisko i nazwe zadania)"<<endl;
-	p.printcout();
+	p.printCout();
 	cout << endl;
-	ta.printl();
+	ta.printCout();
 	cout <<"\n\n";
 	cout << "imie: "; cin >> imie;
 	cout << "nazwisko: "; cin >> nazwisko;
 	cout << "nazwa zadania: "; cin >> nazwa;
 
-	ta.searcH(nazwa);
+	TaskExist = ta.search(nazwa);
 
-	if (ifTaskExist == 1)
+	if (TaskExist == 1)
 	{
 		p.addToTask(imie, nazwisko, nazwa);
 	}
@@ -86,12 +83,16 @@ void Menu31(Person &p, Task& ta)
 
 void Menu32(Person &p, Task &tas)
 {
-	string imie, nazwisko, nazwa;
-	cout << "LISTA OSOB:\n"; p.printcout(); cout << endl;
-	cout << "LISTA ZADAN:\n"; tas.printl(); cout << "\n\n";
+	string imie, nazwisko, nazwa, rly;
+	cout << "LISTA OSOB:\n"; p.printCout(); cout << endl;
+	cout << "LISTA ZADAN:\n"; tas.printCout(); cout << "\n\n";
 	cout << "imie: "; cin >> imie;
 	cout << "nazwisko: "; cin >> nazwisko;
 	cout << "nazwa zadania: "; cin >> nazwa;
+
+	//rly = p.search(imie, nazwisko);
+
+
 	p.delTask(imie, nazwisko, nazwa);
 }
 void Menu33(Person &p)
@@ -102,7 +103,7 @@ void Menu33(Person &p)
 	p.addPerson(imie, nazwisko);
 }
 
-void Menu3(Person &p, Task *tas)
+void Menu3(Person &p, Task &tas)
 {
 	int menu = 4;
 
@@ -110,9 +111,9 @@ void Menu3(Person &p, Task *tas)
 	{
 		cout << "Wybrales opcje edycji osob. Mozesz:\n[1] Dodawac osoby do zadan\n[2] Usuwac osoby od zadan\n[3] Dodawac osoby do projektu\n[0] wyjscie" << endl; cin >> menu;
 		if (menu == 1)
-			Menu31(p, *tas);
+			Menu31(p, tas);
 		else if (menu == 2)
-			Menu32(p, *tas);
+			Menu32(p, tas);
 		else if (menu == 3)
 			Menu33(p);
 		else if (menu == 0)
@@ -121,14 +122,14 @@ void Menu3(Person &p, Task *tas)
 	}
 }
 
-void Menu0(string s1, Task* tas, Person *p, int* koniec)
+void Menu0(Project* pro, Task* tas, Person *p, int* koniec)
 {
 	int menu = 5;
 
 	while (menu != 0)
 	{
 	cout << "Program do organizacji dzialan w projekcie" << endl;
-	cout << "Obecny projekt: " << s1 << "\n\n\n";
+	cout << "Obecny projekt: " << pro->ProjectName <<"\nManagerem projektu jest "<< pro->managerProjektu <<"\n\n\n";
 	cout << "Co chcesz zrobic? mozesz:\n[1] Przejsc do zadan\n[2] Przejsc do projektu \n[3] Edytowac osoby\n"; std::cin >> menu; cout << endl;
 
 	
@@ -137,7 +138,7 @@ void Menu0(string s1, Task* tas, Person *p, int* koniec)
 		else if (menu == 2)
 			Menu2(*koniec);
 		else if (menu == 3)
-			Menu3(*p, tas);
+			Menu3(*p, *tas);
 		else if (menu == 0)
 			return;
 		else cout << "ojej no co za gapa! nie wiem czy zauwazyles ale mozesz wybrac tylko 1 albo 2...\nNo dobrze, sprobujmy jeszcze raz \n";

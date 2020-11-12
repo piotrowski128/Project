@@ -1,33 +1,28 @@
 #pragma once
 #pragma warning(disable : 4996)
-#pragma warning(disable : 4244)
 
 #include <iostream>
+#include <stdio.h> 
+#include <stdlib.h>
 #include <time.h>
-#include <random>
 using namespace std;
 
 class Id
 { // id wykonawcy i id zadania
-	int Id;
-public:
+protected:
 
-	char* generate()
+	char id[13];
+	
+	Id() {};
+
+	string getId()
 	{
-		time_t rawtime;
-		struct tm * timeinfo;
-		time(&rawtime);
-		timeinfo = localtime(&rawtime);
+		time_t czas = time(0);
+		tm* data = localtime(&czas);
 		
+		strftime(id,13,"%y%m%d%H%M%S",data);
 
-		char id [18];
-		srand(time(NULL));
-		for (int i = 0; i < 5; i++)
-		{
-			id[i] = rand() % 10;
-		} 
-
-		strftime(id, 13,"%g%m%j%H%M%S", timeinfo);
-		return &id[18];
+		string ID(id);
+		return ID;
 	}
 };

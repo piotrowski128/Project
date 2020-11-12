@@ -9,9 +9,8 @@ class Task :public Id, Date {
 public:
 	typedef struct listaZadan
 	{
-		string nazwa;
+		string nazwa, id, data;
 		int priorytet;
-		char* id; char* data;
 		listaZadan *next;
 	}*ptr;
 	ptr root;
@@ -22,10 +21,12 @@ public:
 	Task();
 
 	void add(string nazwa, int priorytet);
+	void addTaskFromFile(string nazwa, int priorytet,string data,string id);
 	void delet(string nazwa);
-	void printl();
+	void printCout();
+	void printFile(ofstream & file);
 
-	int searcH(string nazwa);
+	int search(string nazwa);
 };
 Task::Task() {
 	root = nullptr;
@@ -39,6 +40,8 @@ void Task::add(string nazwa, int i) {
 	n->next = nullptr;
 	n->priorytet = i;
 	n->nazwa = nazwa;
+	n->id = Id::getId();
+	n->data = Date::getDate();
 
 	if (root != nullptr) {
 
@@ -53,6 +56,26 @@ void Task::add(string nazwa, int i) {
 	}
 }
 
+void Task::addTaskFromFile(string nazwa, int i, string data, string id) {
+
+	ptr n = new listaZadan;
+	n->next = nullptr;
+	n->priorytet = i;
+	n->nazwa = nazwa;
+	n->id = id;
+	n->data = data;
+	if (root != nullptr) {
+
+		curr = root;
+		while (curr->next != nullptr) {
+			curr = curr->next;
+		}
+		curr->next = n;
+	}
+	else {
+		root = n;
+	}
+}
 void Task::delet(string nazwa)
 {
 	ptr del = nullptr;
@@ -76,11 +99,11 @@ void Task::delet(string nazwa)
 	}
 
 }
-int Task::searcH(string nazwa)
+int Task::search(string nazwa)
 {
 	temp = root;
  	curr = root;
-	while (curr->next != nullptr && curr->nazwa != nazwa) {
+	while (curr != nullptr && curr->nazwa != nazwa) {
 
 		temp = curr;
 		curr = curr->next;
@@ -90,10 +113,22 @@ int Task::searcH(string nazwa)
 	else
 		return 1;
 }
-void Task::printl() {
+
+void Task::printCout() {
 	curr = root;
+	cout << "\nDANE WYSWIETLANE W NASTEPUJACYM FORMACIE:\n";
+	cout << "nazwa: id, [priorytet] ==data==\n\n" << endl;
 	while (curr != nullptr) {
-		cout << "wartosc: " << curr->priorytet << ", " << curr->nazwa << endl;
+		cout << curr->nazwa<<": "<< curr->id << ", ["<<curr->priorytet<<"] =="<<curr->data<<"==" << endl;
+		curr = curr->next;
+	}
+}
+void Task::printFile(ofstream & file)
+{
+	curr = root;
+
+	while (curr != nullptr) {
+		file << curr->nazwa << "," << curr->id << "," << curr->priorytet << "," << curr->data << "," << endl;
 		curr = curr->next;
 	}
 }

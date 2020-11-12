@@ -7,13 +7,15 @@ class Date
 { //klasa daty i godziny
 public:
 	char date[30];
-public:
 	Date() {};
 	
-	void getDate()
+	string getDate()
 	{
 		time_t czas = time(0);
 		tm* data = localtime(&czas);
-		strftime(date, sizeof date, "%F,%X", data);
+
+		strftime(date, sizeof date, "%F; %X", data);
+		string DATE(date);
+		return DATE;
 	}
 };
