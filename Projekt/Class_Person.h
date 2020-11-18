@@ -1,13 +1,16 @@
 #pragma once
+#ifndef CLASS_PERSON_H
+#define CLASS_PERSON_H
 #include <iostream>
 #include "klasy.h"
 
 using namespace std;
 
-
+/**Klasa Task - zawiera dwie listy jednokierunkowe. w jednej z nich jest imiê, nazwisko i id osoby a tak¿e wskaŸnik do drugiej listy.
+W drugiej liœcie jest tylko nazwa zadania*/
 class Person : private Id, Date {
-	// zarz¹dzanie zadaniami: szukanie, usuwanie, dodawanie, zmiana  wykonawcy
-	// przechowuje dane o zadaniu : Nazwê zadania, nazwê projektu, ile osób uczestniczy w zadaniu, priorytet a tak¿e datê rozpoczêcia
+	
+public:
 	typedef struct zadaniaOsoby
 	{
 		string nazwa;
@@ -27,240 +30,61 @@ class Person : private Id, Date {
 	ptrlis curr;
 	ptrlis temp;
 
-	
-public:
+	/**konstruktor domyœlny*/
 	Person();
+
+	/**Funkcja dodaje now¹ osobê do projektu
+	@param imie - imiê osoby
+	@param nazwisko - nazwisko osoby
+	*/
 	void addPerson(string imie, string nazwisko);
+
+	/**Funkcja dodaje osobê z pliku
+	@param imie - imiê osoby
+	@param nazwisko - nazwisko osoby
+	@param id - id osoby
+	*/
 	void addPersonFromFile(string imie, string nazwisko, string id);
+
+	/**Funkcja przydziela osobê do zadania
+	@param imie - imiê osoby
+	@param nazwisko - nazwisko osoby
+	@param nazwa - nazwa zadania
+	*/
 	int addToTask(string imie, string nazwisko, string nazwa);
 
+	/**Funkcja wyszukuje osobê w systemie
+	@param imie - imiê osoby
+	@param nazwisko - nazwisko osoby
+	*/
 	string search(string imie, string nazwisko);
+
+	/**Funkcja usuwa osobê od zadania
+	@param imie - imiê osoby
+	@param nazwisko - nazwisko osoby
+	@param nazwa - nazwa zadania
+	*/
 	void delTask(string imie, string nazwisko, string nazwa);
+
+	/**Funkcja wyswietla elementy listy na standardowym strumieniu wyjsciowym*/
 	void printCout();
+
+	/**Funkcja wczytuje elementy listy do podanego pliku
+	@param file - adres pliku, do którego wczytywane s¹ dane
+	*/
 	void printfile(ofstream& file);
-	void destroy();
 
 };
 
-#include <iostream>
-#include "klasy.h"
-
-
-Person::Person() {
-	root = nullptr;
-	curr = nullptr;
-	temp = nullptr;
-}
-
-void Person::addPerson(string imie, string nazwisko) {
-
-	ptrlis n = new listaOsob;
-	n->next = nullptr;
-	n->ptr = nullptr;
-	n->Name = imie;
-	n->Surname = nazwisko;
-	n->id = getId();
-
-	if (root != nullptr) {
-
-		curr = root;
-		while (curr->next != nullptr) {
-			curr = curr->next;
-		}
-		curr->next = n;
-	}
-	else {
-		root = n;
-	}
-}
-
-void Person::addPersonFromFile(string imie, string nazwisko, string id) {
-
-	ptrlis n = new listaOsob;
-	n->next = nullptr;
-	n->ptr = nullptr;
-	n->Name = imie;
-	n->Surname = nazwisko;
-	n->id = id;
-
-	if (root != nullptr) {
-
-		curr = root;
-		while (curr->next != nullptr) {
-			curr = curr->next;
-		}
-		curr->next = n;
-	}
-	else {
-		root = n;
-	}
-}
-int Person::addToTask(string imie, string nazwisko, string nazwa) {
-
-	ptrzad n = new zadaniaOsoby;
-	n->next = nullptr;
-	n->nazwa = nazwa;
-	temp = root;
-	curr = root;
-
-	string iD = search(imie, nazwisko);
-
-	while (curr->next != nullptr)
-	{
-		if (curr->id == iD)
-		{
-			c = curr->ptr;
-
-			while (c != nullptr)
-			{
-				c = c->next;
-			}
-			c = n;
-			
-
-			return 1;
-		}
-		else
-		{
-			temp = curr;
-			curr = curr->next;
-		}
-		
-	}
-	if (curr->id == iD)
-	{
-		c = curr->ptr;
-
-		while (c != nullptr)
-		{
-			c = c->next;
-		}
-
-		c = n;
-		
-		return 1;
-	}else
-		return 0;
-
-}
-
-void Person::delTask(string imie, string nazwisko, string nazwa)
+/** Klasa Manager - klasa pochodna klasy Person*/
+class Manager : public Person
 {
-	ptrzad del = nullptr;
-	temp = root;
-	curr = root;
-
-	while (curr != nullptr)
-	{
-		if (curr->Name == imie || curr->Surname == nazwisko)
-		{
-			t = curr->ptr;
-			c = curr->ptr;
-			while (c != nullptr && c->nazwa != nazwa) {
-
-				t = c;
-				c = c->next;
-			}
-			if (c == nullptr) {
-				cout << "ni ma\n";
-				delete del;
-			}
-			else {
-				del = c;
-				c = c->next;
-				t->next = c;
-				delete del;
-				cout << "DELLeted\n";
-			}
-		}
-		else
-		{
-			temp = curr;
-			curr = curr->next;
-		}
-	}
-	if (curr->Name == imie || curr->Surname == nazwisko)
-	{
-		{
-			t = curr->ptr;
-			c = curr->ptr;
-			while (c != nullptr && c->nazwa != nazwa) {
-
-				t = c;
-				c = c->next;
-			}
-			if (c == nullptr) {
-				cout << "ni ma\n";
-				delete del;
-			}
-			else {
-				del = c;
-				c = c->next;
-				t->next = c;
-				delete del;
-				cout << "DELLeted\n";
-			}
-		}
-	}
-	else cout << "Nie ma takiej osoby!" << endl;
-
-}
-
-void Person::printCout() {
-	curr = root;
-
-	cout << "Imie i nazwisko:\n";
-	while (curr != nullptr) {
-		cout << "- " << curr->Name << " " << curr->Surname << "; " << curr->id << ";";
-		c = curr->ptr;
-		while (c != nullptr)
-		{
-			cout << c->nazwa << ",";
-			c = c->next;
-		}
-		cout << endl;
-		curr = curr->next;
-	}
-}
-
-void Person::printfile(ofstream& file) {
-	curr = root;
-	while (curr != nullptr) {
-		file << curr->Name << ";" << curr->Surname << ";" << curr->id << ";";
-		c = curr->ptr;
-		while (c != nullptr)
-		{
-			file << c->nazwa << ",";
-			c = c->next;
-		}
-		file << endl;
-		curr = curr->next;
-	}
-}
-
-string Person::search(string imie, string nazwisko)
-{
-	string niema("00");
-	temp = root;
-	curr = root;
-
-	while (curr->next != nullptr)
-	{
-		if (curr->Surname == nazwisko && curr->Name == imie)
-			return curr->id;
-		else
-		{
-			temp = curr;
-			curr = curr->next;
-		}
-	}
-	if(curr->Surname == nazwisko && curr->Name==imie)
-		return curr->id;
-	else
-		return niema;
-}
-
-void Person::destroy()
-{
+public:
 	
-}
+	void endProject(int& i)
+	{
+		i = 1;
+	}
+};
+
+#endif

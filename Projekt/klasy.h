@@ -1,149 +1,77 @@
 #pragma once
 #ifndef KLASY_H
 #define KLASY_H
+#include <iostream>
+
 #include "Class_Date.h"
 #include "Class_Id.h"
 #include "Class_Project.h"
 #include "Class_Person.h"
 #include "Class_Task.h"
 
-void Menu11(Task& t)
-{
-	string nazwa; int priorytet;
+#include "Class_Date.cpp"
+#include "Class_Id.cpp"
+#include "Class_Task.cpp"
+#include "Class_Person.cpp"
+#include "Class_Project.cpp"
 
-	cout << "aby dodac zadanie bedziesz musial podac mi 2 rzeczy: nazwe i stopien priorytetu." << endl;
-	cout << "Podaj nazwe zadania: "; std::cin >> nazwa; cout << endl;
-	cout << "Podaj priorytet zadania 1-4 (1-najwy¿szy): "; std::cin >> priorytet; cout << endl;
-	
-	t.add(nazwa, priorytet);
-}
+#include "klasy.cpp"
 
 
-void Menu12(Task& t)
-{
-	cout << "oto twoja lista zadan. Mam nadzieje ze sie podoba :)" << endl;
-	t.printCout();
-}
+/**Funkcja wyœwietla menu, w którym mo¿na dodaæ nowe zadanie 
+@param t adres zmiennej "t" typu Task
+*/
+void Menu11(Task& t);
 
-void Menu1(Task& tas)
-{
-	int menu = 4;
-	while (menu != 0)
-	{
-		cout << "\nmozesz je:\n[1] Dodawac\n[2] Przejrzec\n\n[0] Wyjdz\n"; std::cin >> menu;
-		if (menu == 0) return;
-		else if (menu == 1)
-			Menu11(tas);
-		else if (menu == 2)
-			Menu12(tas);
-		else cout << "mozesz wybrac 1 albo 2 -,- ehhh....\n"; cout << endl;
-	}
-}
+/**Funkcja wyœwietla menu, w którym mo¿na wyœwietliæ wszystkie zadania w systemie
+@param t adres zmiennej "t" typu Task
+*/
+void Menu12(Task& t);
 
-void Menu2(int &koniec)
-{
-	int menu = 4;
+/**Funkcja wyœwietla menu, w którym mo¿na wybraæ czy dodaæ nowe zadanie lub przejrzeæ istniej¹ce
+@param tas adres zmiennej "tas" typu Task
+*/
+void Menu1(Task& tas);
 
-	while (menu != 0)
-	{
-		cout << "\nwybrales projekt? wiesz, zawsze mozesz zmienic zdanie...\n";
-		cout << "[1] Zakoncz projekt i dodaj nowy\n[0] Wyjdz\n"; std::cin >> menu;
-		if (menu == 0)
-			return;
-		else if (menu == 1)
-		{
-			cout << "Mimo ze wybrales opcje 'Zakoncz projekt' to nic nie szkodzi, potrzebne dane i tak beda zapisane :)" << endl;
-			koniec = 1;
-		}
-		else cout << "mozesz wybrac 1, 2 albo 3 -,- ehhh.... ";
-	}
-}
+/**Funkcja wyœwietla menu, w którym mo¿na wybraæ czy zakoñczyæ projekt. Mo¿na wybraæ opcjê jedynie z poziomu managera
+@param manager adres zmiennej "manager" typu Manager
+@param koniec adres zmiennej "koniec" typu int, potrzebna do zakoñczenia projektu
+*/
+void Menu2(int &koniec, Manager* manager);
 
-void Menu31(Person &p, Task& ta)
-{
-	string imie, nazwisko, nazwa; int TaskExist = 0;
-	cout<<"Dodawanie osoby do zadania. Wybierz osobe z bazy danych a nastepnie zadanie. (Wpisz imie, nazwisko i nazwe zadania)"<<endl;
-	p.printCout();
-	cout << endl;
-	ta.printCout();
-	cout <<"\n\n";
-	cout << "imie: "; cin >> imie;
-	cout << "nazwisko: "; cin >> nazwisko;
-	cout << "nazwa zadania: "; cin >> nazwa;
+/**Funkcja wyœwietla menu, w którym mo¿na przypisaæ osobê do istniej¹cego zadania
+@param p adres zmiennej "p" typu Person
+@param ta adres zmiennej "ta" typu Task, potrzebny do wyszukania czy istnieje dane zadanie w systemie
+*/
+void Menu31(Person &p, Task& ta);
 
-	TaskExist = ta.search(nazwa);
+/**Funkcja wyœwietla menu, w którym mo¿na usun¹æ przypisanie osoby od istniej¹cego zadania
+@param p adres zmiennej "p" typu Person
+@param tas adres zmiennej "tas" typu Task
+*/
+void Menu32(Person &p, Task &tas);
 
-	if (TaskExist == 1)
-	{
-		p.addToTask(imie, nazwisko, nazwa);
-	}
-	else cout << "\nNie ma takiego zadania\n\n";
-	
-}
+/**Funkcja wyœwietla menu, w którym mo¿na dodaæ now¹ osobê do projektu
+@param p adres zmiennej "p" typu Person
+*/
+void Menu33(Person &p);
 
-void Menu32(Person &p, Task &tas)
-{
-	string imie, nazwisko, nazwa, rly;
-	cout << "LISTA OSOB:\n"; p.printCout(); cout << endl;
-	cout << "LISTA ZADAN:\n"; tas.printCout(); cout << "\n\n";
-	cout << "imie: "; cin >> imie;
-	cout << "nazwisko: "; cin >> nazwisko;
-	cout << "nazwa zadania: "; cin >> nazwa;
+/**Funkcja wyœwietla menu, w którym mo¿na wybraæ czy przypisaæ osobê do zadania, od³¹czyæ od zadania lub dodaæ osobê do projektu
+@param p adres zmiennej "p" typu Person
+@param tas adres zmiennej "tas" typu Task
+*/
+void Menu3(Person &p, Task &tas);
 
-	//rly = p.search(imie, nazwisko);
-
-
-	p.delTask(imie, nazwisko, nazwa);
-}
-void Menu33(Person &p)
-{
-	string imie, nazwisko;
-	cout << "Dodawanie osoby. Wpisz jej imie: "; cin >> imie; cout << endl;
-	cout << "i nazwisko: "; cin >> nazwisko; cout << endl;
-	p.addPerson(imie, nazwisko);
-}
-
-void Menu3(Person &p, Task &tas)
-{
-	int menu = 4;
-
-	while (menu != 0)
-	{
-		cout << "Wybrales opcje edycji osob. Mozesz:\n[1] Dodawac osoby do zadan\n[2] Usuwac osoby od zadan\n[3] Dodawac osoby do projektu\n[0] wyjscie" << endl; cin >> menu;
-		if (menu == 1)
-			Menu31(p, tas);
-		else if (menu == 2)
-			Menu32(p, tas);
-		else if (menu == 3)
-			Menu33(p);
-		else if (menu == 0)
-			return;
-		else cout << "ojej no co za gapa! nie wiem czy zauwazyles ale mozesz wybrac tylko 1 albo 2...\nNo dobrze, sprobujmy jeszcze raz \n";
-	}
-}
-
-void Menu0(Project* pro, Task* tas, Person *p, int* koniec)
-{
-	int menu = 5;
-
-	while (menu != 0)
-	{
-	cout << "Program do organizacji dzialan w projekcie" << endl;
-	cout << "Obecny projekt: " << pro->ProjectName <<"\nManagerem projektu jest "<< pro->managerProjektu <<"\n\n\n";
-	cout << "Co chcesz zrobic? mozesz:\n[1] Przejsc do zadan\n[2] Przejsc do projektu \n[3] Edytowac osoby\n"; std::cin >> menu; cout << endl;
-
-	
-		if (menu == 1)
-			Menu1(*tas);
-		else if (menu == 2)
-			Menu2(*koniec);
-		else if (menu == 3)
-			Menu3(*p, *tas);
-		else if (menu == 0)
-			return;
-		else cout << "ojej no co za gapa! nie wiem czy zauwazyles ale mozesz wybrac tylko 1 albo 2...\nNo dobrze, sprobujmy jeszcze raz \n";
-
-	}
-}
+/**Funkcja wyœwietla g³ówne menu
+@param pro wskaŸnik na zmienn¹ "pro" typu Project
+@param tas wskaŸnik na zmienn¹ "tas" typu Task
+@param p wskaŸnik na zmienn¹ "p" typu Person
+@param manager wskaŸnik na zmienn¹ "manager" typu Manager
+@param koniec wskaŸnik na zmienn¹ "koniec" typu int - definiuje czy zakoñæzyæ projekt
+@param czyManager wskaŸnik na zmienn¹ "czyManager" typu int - okreœla dostêp do niektórych elementów programu
+@param imie przekazuje imiê osoby u¿ywaj¹cej programu
+@param nazwisko przekazuje nazwisko osoby u¿ywaj¹cej programu
+*/
+void Menu0(Project* pro, Task* tas, Person *p, Manager* manager, int* koniec, int* czyManager, string imie, string nazwisko);
 
 #endif

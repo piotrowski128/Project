@@ -13,7 +13,9 @@
 
 using namespace std;
 int main() {
-	string s1, s2, s3; Person p; Task tas; Project project; int czyKoniec=0;
+	
+	
+	string s1, s2, s3; Person p; Task tas; Project project; Manager manager; int czyKoniec = 0;
 	
 	//pobieranie danych z pliku Project i dodawanie do klasy Project+
 	ifstream plik1("Project.txt");
@@ -23,9 +25,16 @@ int main() {
 	s1.erase(0, s1.find_first_of(";") + 1);
 
 	string managerProjektu = s1.substr(0, s1.find_first_of(";"));
-	s1.erase(0, s1.find_first_of(";") + 1);
-
 	project.projectData(nazwaProjektu, managerProjektu);
+
+	string imieM = s1.substr(0, s1.find_first_of(" "));
+	s1.erase(0, s1.find_first_of(" ") + 1);
+	string nazwiskoM = s1.substr(0, s1.find_first_of(";"));
+	s1.erase(0, s1.find_first_of(";") + 1);
+	string idM = s1.substr(0, s1.find_first_of(";"));
+	s1.erase(0, s1.find_first_of(";") + 1);
+	
+	manager.addPersonFromFile(imieM, nazwiskoM, idM);
 	
 	plik1.close();
 
@@ -88,16 +97,23 @@ int main() {
 	plik2.close();
 
 	//Menu
-	Menu0(&project, &tas, &p, &czyKoniec);
+	string Imie, Nazwisko, gud, result, blank(" "); string niema("0"); int czyManager = 0;
+	cout << "Powiedz, kim ty jestes?\nImie: "; cin >> Imie; cout << endl;
+	cout << "Nazwisko: "; cin >> Nazwisko; cout << endl;
+	gud = p.search(Imie, Nazwisko);
+	if (gud == niema)
+		gud = manager.search(Imie, Nazwisko);
 	
-	//Po wyjsciu z menu -> zakonczenie dzialania programu
+	if (gud != niema)
+	{	
+		Menu0(&project, &tas, &p, &manager, &czyKoniec, &czyManager, Imie, Nazwisko );
+		cout << "Szkoda ze musimy sie pozegnac :,( \n";
+	}
+	else cout << "NIE MA NIKOGO TAKIEGO!" << endl;
 	
-	
-
-	cout << "Szkoda ze musimy sie pozegnac :,( \n";
-
 	if (czyKoniec == 1)
 	{
+		string nazwaProjektu = project.ProjectName;
 		//tworzenie nazwy dla pliku nazwa_projektu.txt
 		project.ProjectName.push_back('.');
 		project.ProjectName.push_back('t');
@@ -122,25 +138,21 @@ int main() {
 		collect.open(project.ProjectName, ios::out);
 		
 		collect << "PROJEKT ZAKONCZONY!" << endl;
-		collect << "projekt: '" << project.ProjectName << "' pod przewodnictwem managera: " << project.managerProjektu << endl;
+		collect << "projekt: '" << nazwaProjektu << "' pod przewodnictwem managera: " << project.managerProjektu << endl;
 
 		collect << "\n\n\n\nDANE Z PROJEKTU:\nOSOBY I ICH ZADANIA" << endl;
 		p.printfile(collect);
 		collect << "\nZADANIA" << endl;
 		tas.printFile(collect);
-
 		collect.close();
+
+		clear1.open("Project.txt", ofstream::out);
+		cout << "Podaj nazwe nowego projektu: ";
+		cout << "Kto ma byc managerem?: ";
 
 	}
 	else {
-		
-	/*	ofstream clear1;
-		clear1.open("Project.txt", ios::app | ofstream::trunc);
-		clear1.close();
-		clear1.open("Project.txt", ofstream::out);
-		clear1 << project.ProjectName << ";" << project.managerProjektu << ";";
-		clear1.close();
-
+		// zabezpieczenie w razie aktualizacji w programie: usuwa dane z pliku i wpisuje dane z programu
 		ofstream clear2;
 		clear2.open("Task.txt", ofstream::out | ofstream::trunc);
 		clear2.close();
@@ -153,9 +165,8 @@ int main() {
 		clear3.close();
 		clear3.open("Person.txt", ofstream::out);
 		p.printfile(clear3);
-		clear3.close();*/
+		clear3.close();
 
-		p.destroy();
 	}
 
 	return 0;

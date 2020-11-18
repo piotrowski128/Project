@@ -5,24 +5,20 @@
 #include <stdio.h> 
 #include <stdlib.h>
 #include <time.h>
+#include "klasy.h"
+
 using namespace std;
 
+/**Klasa tworz¹ca i przechowuj¹ca numer id zarówno dla zadañ jak i pracowników*/
 class Id
-{ // id wykonawcy i id zadania
+{ 
 protected:
-
 	char id[13];
 	
+	/**konstruktor domyœlny*/
 	Id() {};
 
-	string getId()
-	{
-		time_t czas = time(0);
-		tm* data = localtime(&czas);
-		
-		strftime(id,13,"%y%m%d%H%M%S",data);
-
-		string ID(id);
-		return ID;
-	}
+	/**Funkcja generuje numer id
+	@return id typu string*/
+	string getId();
 };

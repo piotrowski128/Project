@@ -1,21 +1,26 @@
 #pragma once
+
+#ifndef CLASS_DATE_H
+#define CLASS_DATE_H
 #pragma warning(disable : 4996)
 #include <iostream>
 #include <time.h>
+#include "klasy.h"
+
 using namespace std;
+
+/**Klasa generuj¹ca i przechowuj¹ca datê*/
 class Date
-{ //klasa daty i godziny
+{ 
 public:
 	char date[30];
+	
+	/**Konstruktor domyœlny*/
 	Date() {};
 	
-	string getDate()
-	{
-		time_t czas = time(0);
-		tm* data = localtime(&czas);
-
-		strftime(date, sizeof date, "%F; %X", data);
-		string DATE(date);
-		return DATE;
-	}
+	/**Funkcja generuj¹ca datê
+	@return datê tytpu string*/
+	string getDate();
 };
+#endif
+
