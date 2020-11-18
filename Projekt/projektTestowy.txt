@@ -1,0 +1,15 @@
+PROJEKT ZAKONCZONY!
+projekt: 'projektTestowy' pod przewodnictwem managera: Piotr Januszkiewicz
+
+
+
+
+DANE Z PROJEKTU:
+OSOBY I ICH ZADANIA
+przykladowa;osoba;201112070629;
+piotr;januszkiewicz;201112070753;
+
+ZADANIA
+noweZadanie,201112070501,3,2020-11-12; 07:05:01,
+samoloty,201112070529,1,2020-11-12; 07:05:29,
+wazne,201112070537,2,2020-11-12; 07:05:37,

@@ -1,4 +1,2 @@
-imie nazwisko
-W od d
-W opwk wdm
-W sda d
+przykladowa;osoba;201112070629;
+piotr;januszkiewicz;201112070753;
